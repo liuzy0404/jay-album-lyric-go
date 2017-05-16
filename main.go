@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"jay-album-lyric-go/request"
 )
 
 func main() {
-	albumFile := "album.json"
-	buf, err := ioutil.ReadFile(albumFile)
-	if err != nil {
-		fmt.Printf("File err: %s\n", err)
-	}
-	fmt.Printf("%s\n", string(buf))
+	request.HttpGet("http://music.163.com/album?id=18918")
+	fmt.Println("ok")
+	/*content, code := request.HttpGet("http://music.163.com/album?id=18918")
+	fmt.Println(content)
+	fmt.Println("code is ", code)*/
 }
