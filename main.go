@@ -6,9 +6,6 @@ import (
 )
 
 func main() {
-	request.HttpGet("http://music.163.com/album?id=18918")
+	request.HttpGet("http://music.163.com/album?id=18918", "jay")
 	fmt.Println("ok")
-	/*content, code := request.HttpGet("http://music.163.com/album?id=18918")
-	fmt.Println(content)
-	fmt.Println("code is ", code)*/
 }

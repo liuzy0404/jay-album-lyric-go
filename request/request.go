@@ -26,7 +26,7 @@ type lyric struct {
 	Lyric string
 }
 
-func HttpGet(url string) (content string, statuscode int) {
+func HttpGet(url, albumName string) (content string, statuscode int) {
 	var songList []song
 	res, err := http.Get(url)
 	if err != nil {
@@ -49,12 +49,12 @@ func HttpGet(url string) (content string, statuscode int) {
 	for _, song := range songList {
 		//fmt.Println(song.Name, "'s id is ", song.Id)
 		fmt.Println("[Get] " + lyricPAI + strconv.Itoa(song.Id))
-		getLyric(lyricPAI+strconv.Itoa(song.Id), song.Name)
+		getLyric(lyricPAI+strconv.Itoa(song.Id), albumName, song.Name)
 	}
 	return
 }
 
-func getLyric(url string, songName string) {
+func getLyric(url, albumName, songName string) {
 	var lyricContent lyric
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", ua)
@@ -74,7 +74,11 @@ func getLyric(url string, songName string) {
 	content := string(data)
 	json.Unmarshal([]byte(content), &lyricContent)
 	lyricContent.Lyric = lyricExp.ReplaceAllString(lyricContent.Lyric, "")
-	fileName := songName + ".txt"
+	fileName := albumName + "/" + songName + ".txt"
+	// check whether album direction exist or not
+	if _, err := os.Stat("./" + albumName); os.IsNotExist(err) {
+		os.Mkdir(albumName, 0777)
+	}
 	file, err := os.Create(fileName)
 	if err != nil {
 		fmt.Println("create file failed", err)
