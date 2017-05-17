@@ -10,7 +10,7 @@ func getUserTips(slice []albumId.Album) (showUserTips string) {
 	for _, album := range slice {
 		showUserTips += "[" + album.ID + "] - " + album.AlbumName + "\n"
 	}
-	return showUserTips
+	return
 }
 
 func containsString(slice []albumId.Album, input string) bool {
