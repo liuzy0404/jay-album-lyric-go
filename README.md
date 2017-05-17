@@ -1,4 +1,4 @@
-![screenshot](https://raw.githubusercontent.com/liuzy0404/jay-album-lyric-go/master/screenshot/jay-album-lyric-go.png)
+![screenshot](https://raw.githubusercontent.com/liuzy0404/jay-album-lyric-go/master/screenshot/screenshot.png)
 
 ## a simple crawler for jayChou's album lyric based on go
 
