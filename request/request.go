@@ -33,13 +33,13 @@ func HTTPGet(url, albumName string) (content string) {
 	var songList []song
 	res, err := http.Get(url)
 	if err != nil {
-		fmt.Println("http get error.")
+		fmt.Println("http get error.", err)
 		return
 	}
 	defer res.Body.Close()
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println("http read error.")
+		fmt.Println("http read error.", err)
 		return
 	}
 	// get matched array
@@ -60,13 +60,13 @@ func getLyric(url, albumName, songName string) {
 	client := http.DefaultClient
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println("http get error.")
+		fmt.Println("http get error.", err)
 		return
 	}
 	defer res.Body.Close()
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println("http read error.")
+		fmt.Println("http read error.", err)
 		return
 	}
 
@@ -80,7 +80,7 @@ func getLyric(url, albumName, songName string) {
 	}
 	file, err := os.Create(fileName)
 	if err != nil {
-		fmt.Println("create file failed", err)
+		fmt.Println("create file failed.", err)
 		return
 	}
 	file.Write([]byte(lyricContent.Lyric))
