@@ -33,6 +33,7 @@ func main() {
 		return
 	}
 	if containsString(albumId.AlbumList, input) {
+		fmt.Println("Waiting~")
 		album := albumId.GetAlbumID(input)
 		request.HTTPGet(request.AlbumAPI+album.AlbumID, album.AlbumName)
 		fmt.Println("Done!")
