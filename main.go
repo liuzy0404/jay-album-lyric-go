@@ -35,7 +35,7 @@ func main() {
 	if containsString(albumId.AlbumList, input) {
 		album := albumId.GetAlbumID(input)
 		request.HTTPGet(request.AlbumAPI+album.AlbumID, album.AlbumName)
-		fmt.Println("done!")
+		fmt.Println("Done!")
 		return
 	}
 	fmt.Println("\nYou should enter a correct album's id")
