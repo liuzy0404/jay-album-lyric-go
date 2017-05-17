@@ -1,14 +1,14 @@
 package albumId
 
-type album struct {
-	id        string
-	albumID   string
-	albumName string
+// Album export album struct
+type Album struct {
+	ID        string
+	AlbumID   string
+	AlbumName string
 }
 
-type albums []album
-
-var albumList = albums{
+// AlbumList export album list
+var AlbumList = []Album{
 	{"1", "18918", "jay"},
 	{"2", "18915", "范特西"},
 	{"3", "18907", "八度空间"},
@@ -25,12 +25,13 @@ var albumList = albums{
 	{"14", "34720827", "周杰伦的床边故事"},
 }
 
-func GetAlbumID(idx string) interface{} {
-	for _, album := range albumList {
-		if idx == album.albumID {
-			mAlbum := map[string]string{"albumID": album.albumID, "albumName": album.albumName}
-			return mAlbum
+// GetAlbumID for get album's id from user's input
+func GetAlbumID(idx string) (aAlbum Album) {
+	for _, album := range AlbumList {
+		if idx == album.ID {
+			aAlbum.AlbumID = album.AlbumID
+			aAlbum.AlbumName = album.AlbumName
 		}
 	}
-	return "Choose a correct album."
+	return
 }
