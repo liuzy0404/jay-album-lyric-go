@@ -31,6 +31,7 @@ type lyric struct {
 // HTTPGet export HTTPGet func
 func HTTPGet(url, albumName string) (content string) {
 	var songList []song
+	lyricChan := make(chan string)
 	res, err := http.Get(url)
 	if err != nil {
 		fmt.Println("http get error.", err)
@@ -48,12 +49,26 @@ func HTTPGet(url, albumName string) (content string) {
 	json.Unmarshal([]byte(content), &songList)
 	for _, song := range songList {
 		//fmt.Println(song.Name, "'s id is ", song.ID)
-		getLyric(lyricAPI+strconv.Itoa(song.ID), albumName, song.Name)
+		go getLyric(lyricAPI+strconv.Itoa(song.ID), lyricChan)
+
+		// check whether album direction exist or not
+		if _, err := os.Stat("./" + albumName); os.IsNotExist(err) {
+			os.Mkdir(albumName, 0777)
+		}
+
+		fileName := albumName + "/" + song.Name + ".txt"
+		file, err := os.Create(fileName)
+		if err != nil {
+			fmt.Println("create file failed.", err)
+			return
+		}
+		file.Write([]byte(<-lyricChan))
+		fmt.Println(song.Name + " saved!")
 	}
 	return
 }
 
-func getLyric(url, albumName, songName string) {
+func getLyric(url string, lyricChan chan string) {
 	var lyricContent lyric
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", ua)
@@ -69,20 +84,8 @@ func getLyric(url, albumName, songName string) {
 		fmt.Println("http read error.", err)
 		return
 	}
-
 	content := string(data)
 	json.Unmarshal([]byte(content), &lyricContent)
 	lyricContent.Lyric = lyricExp.ReplaceAllString(lyricContent.Lyric, "")
-	fileName := albumName + "/" + songName + ".txt"
-	// check whether album direction exist or not
-	if _, err := os.Stat("./" + albumName); os.IsNotExist(err) {
-		os.Mkdir(albumName, 0777)
-	}
-	file, err := os.Create(fileName)
-	if err != nil {
-		fmt.Println("create file failed.", err)
-		return
-	}
-	file.Write([]byte(lyricContent.Lyric))
-	fmt.Println(songName + " saved!")
+	lyricChan <- lyricContent.Lyric
 }
