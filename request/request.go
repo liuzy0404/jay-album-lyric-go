@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"time"
 )
 
 var (
@@ -47,6 +48,7 @@ func HTTPGet(url, albumName string) (content string) {
 	content = string(submatch[1])
 	json.Unmarshal([]byte(content), &songList)
 	for _, song := range songList {
+		tStart := time.Now().UnixNano() / 1e6
 		//fmt.Println(song.Name, "'s id is ", song.ID)
 		go getLyric(lyricAPI+fmt.Sprintf("%d", song.ID), lyricChan)
 
@@ -62,7 +64,9 @@ func HTTPGet(url, albumName string) (content string) {
 			return
 		}
 		file.Write([]byte(<-lyricChan))
-		fmt.Println(song.Name + " saved!")
+		tEnd := time.Now().UnixNano() / 1e6
+		t := fmt.Sprintf("%d", tEnd-tStart)
+		fmt.Println(song.Name + " saved in " + t + "ms")
 	}
 	return
 }
