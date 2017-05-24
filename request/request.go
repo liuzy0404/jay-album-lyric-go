@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"strconv"
 )
 
 var (
@@ -49,7 +48,7 @@ func HTTPGet(url, albumName string) (content string) {
 	json.Unmarshal([]byte(content), &songList)
 	for _, song := range songList {
 		//fmt.Println(song.Name, "'s id is ", song.ID)
-		go getLyric(lyricAPI+strconv.Itoa(song.ID), lyricChan)
+		go getLyric(lyricAPI+fmt.Sprintf("%d", song.ID), lyricChan)
 
 		// check whether album direction exist or not
 		if _, err := os.Stat("./" + albumName); os.IsNotExist(err) {
